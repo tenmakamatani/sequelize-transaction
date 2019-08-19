@@ -1,9 +1,49 @@
 "use strict";
 
-const sequelize = require("./models/sequelize-loader").database;
-const User = require("./models/user");
-const Product = require("./models/product");
+const Sequelize = require("sequelize");
+const sequelize = new Sequelize("sequelize_transaction", process.argv[2], process.argv[3], { dialect: "mysql" });
 
+// テーブルの定義
+const User = sequelize.define("users", {
+    userId: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        allowNull: false
+    },
+    userName: {
+        type: Sequelize.STRING,
+        allowNull: false
+    }
+}, {
+        freezeTableName: true,
+        timestamps: false
+    });
+
+const Product = sequelize.define("products", {
+    productId: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        allowNull: false
+    },
+    productName: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    boughtBy: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+    }
+}, {
+        freezeTableName: true,
+        timestamps: false,
+        indexes: [
+            {
+                fields: ["boughtBy"]
+            }
+        ]
+    });
+
+// モデルをテーブルと同期させる
 User.sync().then(() => {
     Product.belongsTo(User, { foreignKey: "boughtBy" });
     Product.sync().catch((err) => {
