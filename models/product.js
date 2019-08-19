@@ -1,8 +1,9 @@
 "use strict";
 
-import { database, Sequelize } from "./sequelize-loader";
+const loader = require('./sequelize-loader');
+const Sequelize = loader.Sequelize;
 
-const Product = database.define("products", {
+const Product = loader.database.define("products", {
     productId: {
         type: Sequelize.INTEGER,
         primaryKey: true,

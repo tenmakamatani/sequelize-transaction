@@ -1,13 +1,8 @@
 "use strict";
 
-import Sequelize from "sequelize";
+const Sequelize = require("sequelize");
 
-const sequelize = new Sequelize(
-    "mysql://root:root@localhost/sequelize_transaction",
-    {
-        operatorsAliases: false
-    }
-);
+const sequelize = new Sequelize("sequelize_transaction", "root", "root", { dialect: "mysql" });
 
 module.exports = {
     database: sequelize,
